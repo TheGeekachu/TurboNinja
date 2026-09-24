@@ -52,6 +52,12 @@ class Game:
             'ambience': pygame.mixer.Sound('data/sfx/jump.wav'),
         }
         
+        self.sfx['ambience'].set_volume(0)
+        self.sfx['shoot'].set_volume(0)
+        self.sfx['hit'].set_volume(0)
+        self.sfx['dash'].set_volume(0)
+        self.sfx['jump'].set_volume(0)
+
         self.clouds = Clouds(self.assets['clouds'], count=16)
         self.player = Player(self, (50, 50), (8, 15))
         self.tilemap = Tilemap(self, tile_size=16)
@@ -84,6 +90,9 @@ class Game:
         self.transition = -30
         
     def run(self):
+        pygame.mixer.music.load('data/music.wav')
+        pygame.mixer.music.set_volume(0.5)
+
         while True:
             self.display.fill((0, 0, 0, 0))
             self.display_2.blit(self.assets['background'], (0, 0))
@@ -145,6 +154,7 @@ class Game:
                     if self.player.rect().collidepoint(projectile[0]):
                         self.projectiles.remove(projectile)
                         self.dead += 1
+                        self.sfx['hit'].play()
                         self.screenshake = max(16, self.screenshake)
                         for i in range(30):
                             angle = random.random() * math.pi * 2
@@ -181,7 +191,8 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         self.movement[1] = True
                     if event.key == pygame.K_UP:
-                        self.player.jump()
+                        if self.player.jump():
+                            self.sfx['jump'].play()
                     if event.key == pygame.K_x:
                         self.player.dash()
                 if event.type == pygame.KEYUP:
