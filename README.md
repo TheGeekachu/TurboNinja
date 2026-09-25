@@ -1,0 +1,3 @@
+Welcome to TurboNinja, a platformer I made in Pygame and pure Python. This is my first major Pygame project, so take it easy on me. You play as a Ninja, who unfortunately does not have a gun, so you must use you Ninja Dash attack (X), to defeat the enemies. Arrow keys to jump and move around. This game introduced me to particle systems, assets, and just how painful game dev is. Thank you for being here for this.
+
+**Regards, TheGeekachu**

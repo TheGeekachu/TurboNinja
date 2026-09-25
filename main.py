@@ -3,6 +3,7 @@ import sys
 import math
 import random
 import pygame
+import asyncio
 from scripts.utils import load_image, load_images, Animation
 from scripts.entities import PhysicsEntity, Player, Enemy
 from scripts.tilemap import Tilemap
@@ -89,9 +90,7 @@ class Game:
         self.dead = 0
         self.transition = -30
         
-    def run(self):
-        pygame.mixer.music.load('data/music.wav')
-        pygame.mixer.music.set_volume(0.5)
+    async def run(self):
 
         while True:
             self.display.fill((0, 0, 0, 0))
@@ -101,7 +100,11 @@ class Game:
             if not len(self.enemies):
                 self.transition += 1
                 if self.transition > 30:
-                    self.level = min(self.level + 1, len(os.listdir('data/maps')) - 1)
+                    try:
+                        max_levels = len(os.listdir('data/maps'))
+                    except Exception:
+                        max_levels = 5
+                    self.level = min(self.level + 1, max_levels - 1)
                     self.load_level(self.level)
             if self.transition < 0:
                 self.transition += 1
@@ -214,4 +217,7 @@ class Game:
             pygame.display.update()
             self.clock.tick(60)
 
-Game().run()
+            await asyncio.sleep(0)
+
+if __name__ == '__main__':
+    asyncio.run(Game().run())
